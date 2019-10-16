@@ -1,47 +1,46 @@
-#include <bits/stdc++.h> 
+// C++ program to count number of ways any 
+// given integer x can be expressed as n-th 
+// power of unique natural numbers. 
+#include<bits/stdc++.h> 
 using namespace std; 
 
-
-int minStepToDeleteString(string str) 
+// Function to calculate and return the 
+// power of any given number 
+int power(int num, unsigned int n) 
 { 
-	int N = str.length(); 
-	int dp[N + 1][N + 1]; 
-	for (int i = 0; i <= N; i++) 
-		for (int j = 0; j <= N; j++) 
-			dp[i][j] = 0; 
+	if (n == 0) 
+		return 1; 
+	else if (n%2 == 0) 
+		return power(num, n/2)*power(num, n/2); 
+	else
+		return num*power(num, n/2)*power(num, n/2); 
+} 
 
-	for (int len = 1; len <= N; len++) 
+int checkRecursive(int x, int n, int curr_num = 1, 
+				int curr_sum = 0) 
+{ 
+	
+	int results = 0; 
+
+	int p = power(curr_num, n); 
+	while (p + curr_sum < x) 
 	{ 
-		for (int i = 0, j = len - 1; j < N; i++, j++) 
-		{ 
-			if (len == 1) 
-				dp[i][j] = 1; 
-			else
-			{ 
-				dp[i][j] = 1 + dp[i + 1][j]; 
-				if (str[i] == str[i + 1]) 
-					dp[i][j] = min(1 + dp[i + 2][j], dp[i][j]); 
-				for (int K = i + 2; K <= j; K++) 
-					if (str[i] == str[K]) 
-						dp[i][j] = min(dp[i+1][K-1] + dp[K+1][j], 
-													dp[i][j]); 
-			} 
-		} 
+		results += checkRecursive(x, n, curr_num+1, 
+										p+curr_sum); 
+		curr_num++; 
+		p = power(curr_num, n); 
 	} 
 
-	return dp[0][N - 1]; 
+	if (p + curr_sum == x){
+		results++; 
+	}
+
+	return results; 
 } 
 
 int main() 
-{ 	int T;
-	cin>>T;
-	for(int i=0;i<T;i++){
-		int N;
-		cin>>N;
-		string str ; 
-		cin>>str;
-	cout << minStepToDeleteString(str) << endl; 
+{ 
+	int x = 10, n = 2; 
+	cout << checkRecursive(x, n); 
 	return 0; 
-	}
-	
 } 
