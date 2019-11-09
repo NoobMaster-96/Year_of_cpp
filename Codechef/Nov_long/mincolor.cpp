@@ -1,42 +1,45 @@
 #include<bits/stdc++.h>
 using namespace std;
-
+int solve(vector<vector<int>> A, vector<int> idx, int M, int N){
+	int ans = 1000000005;
+	while(1){
+		int maxval = -1000000005;
+		int minval = 1000000005;
+		int maxidx = -1;
+		for(int i=0;i<M;i++){
+			if(maxval<A[i][idx[i]]){
+				maxval = max(maxval,A[i][idx[i]]);
+				maxidx = i;
+			}
+			minval = min(minval,A[i][idx[i]]);
+		}
+		ans = min(ans,maxval-minval);
+		idx[maxidx]--;
+		if(idx[maxidx]<0){
+			break;
+		}
+	}
+	return ans;
+}
 int main(){
 	int T;
 	cin>>T;
 	for(int i=0;i<T;i++){
 		int M,N;
 		cin>>N>>M;
-		vector<int> A(N,0);
-		for(int j=0;j<N;j++){
-			cin>>A[j];
+		vector<vector<int>> A(M);
+		for(int j=1;j<=N;j++){
+			int temp;
+			cin>>temp;
+			int idx = j%M;
+			A[idx].push_back(temp);
 		}
-		int diff = A[0]-A[1];
-		if(diff<0)
-			diff = diff*(-1);
-		if(M==2){
-			for(int j=0;j<N-1;j++){
-				for(int k=j+1;k<N;k+=2){
-					int temp=A[j]-A[k];
-					if(temp<0)
-						temp = temp*(-1);
-					if(temp<diff)
-						diff=temp;
-				}
-			}
+		vector<int> idx(M,0);
+		for(int j=0;j<M;j++){
+			sort(A[j].begin(),A[j].end());
+			idx[j] = A[j].size()-1;
 		}
-		else{
-			for(int j=0;j<N-1;j++){
-				for(int k=j+1;k<N;k++){
-					int temp=A[j]-A[k];
-					if(temp<0)
-						temp = temp*(-1);
-					if(temp<diff)
-						diff=temp;
-				}
-			}
-		}
-		cout<<diff<<endl;
+		cout<<solve(A,idx,M,N)<<endl;
 	}
 	return 0;
 }

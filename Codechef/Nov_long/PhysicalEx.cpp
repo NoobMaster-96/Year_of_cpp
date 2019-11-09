@@ -2,72 +2,107 @@
 #include<math.h>
 using namespace std;
 
-double dist(vector<int> start, vector<int> mid1, vector<int> mid2, vector<int> end){
-	
-	double distance1=0;
-	double distance2=0;
-	double distance3=0;
-	distance1 = sqrt(pow((mid1[0]-start[0]),2)+pow((mid1[1]-start[1]),2));
-	distance2 = sqrt(pow((mid2[0]-mid1[0]),2)+pow((mid2[1]-mid1[1]),2));
-	distance3 = sqrt(pow((end[0]-mid2[0]),2)+pow((end[1]-mid2[1]),2));
-
-	return distance1+distance2+distance3;
+double dist(pair<int,int> S, pair<int,int> E){
+	double distance = sqrt(pow(S.first-E.first,2)+pow(S.second-E.second,2));
+	return distance;
 }
 int main(){
 	int T;
 	cin>>T;
 	for(int i=0;i<T;i++){
-		vector<int> start(2,0);
-		cin>>start[0]>>start[1];
+		pair <int,long long int> start;
+		int x,y;
+		cin>>x>>y;
+		start = make_pair(x,y);
 		int N,M,K;
 		cin>>N>>M>>K;
-		vector<vector<int>> Np;
-		vector<vector<int>> Mp;
-		vector<vector<int>> Kp;
+		//cout<<"####"<<endl;
+		vector<pair<int,int>> A;
+		vector<pair<int,int>> B;
+		vector<pair<int,int>> C;
 		for(int j=0;j<N;j++){
-			vector<int > point(2,0);
-			cin>>point[0];
-			cin>>point[1];
-			Np.push_back(point);
+			pair <int,int> point;
+			int x,y;
+			cin>>x>>y;
+			point = make_pair(x,y);
+			A.push_back(point);
+		}
+		//cout<<"####"<<endl;
+		for(int j=0;j<M;j++){
+			pair <int,int> point;
+			int x,y;
+			cin>>x>>y;
+			point = make_pair(x,y);
+			B.push_back(point);
+		}
+		//cout<<"####"<<endl;
+		for(int j=0;j<K;j++){
+			pair <int,int> point;
+			int x,y;
+			cin>>x>>y;
+			point = make_pair(x,y);
+			C.push_back(point);
+		}
+		//cout<<"####"<<endl;
+		vector<double> S_A;
+		vector<double> S_B;
+		vector<vector<double>> A_B;
+		vector<double> A_C;
+		vector<double> B_C;
+		for(int j=0;j<N;j++){
+			double distance = dist(start,A[j]);
+			S_A.push_back(distance);
 		}
 		for(int j=0;j<M;j++){
-			vector<int > point(2,0);
-			cin>>point[0];
-			cin>>point[1];
-			Mp.push_back(point);
+			double distance = dist(start,B[j]);
+			S_B.push_back(distance);
 		}
-		for(int j=0;j<K;j++){
-			vector<int > point(2,0);
-			cin>>point[0];
-			cin>>point[1];
-			Kp.push_back(point);
+		for(int j=0;j<N;j++){
+			vector<double> temp;
+			for(int k=0;k<M;k++){
+				double distance = dist(A[j],B[k]);
+				temp.push_back(distance);
+			}
+			A_B.push_back(temp);
 		}
-		double distance = dist(start,Np[0],Mp[0],Kp[0]);
-		//cout<<distance<<endl;
-		for(int i=0;i<N;i++){
-			for(int j=0;j<M;j++){
-				for(int k=0;k<K;k++){
-					double temp = dist(start,Np[i],Mp[j],Kp[k]);
-					//cout<<temp<<endl;
-					if(temp<distance){
-						distance=temp;
-					}
+		for(int j=0;j<N;j++){
+			double min_distance = dist(A[0],C[0]);
+			for(int k=0;k<K;k++){
+				double distance = dist(A[j],C[k]);
+				if(distance<min_distance){
+					min_distance = distance;
+				}
+			}
+			A_C.push_back(min_distance);
+		}
+		for(int j=0;j<M;j++){
+			double min_distance = dist(B[0],C[0]);
+			for(int k=0;k<K;k++){
+				double distance = dist(B[j],C[k]);
+				if(distance<min_distance){
+					min_distance = distance;
+				}
+			}
+			B_C.push_back(min_distance);
+		}
+		double ans = S_A[0]+A_B[0][0]+B_C[0] ;
+		for(int j=0;j<N;j++){
+			for(int k=0;k<M;k++){
+				double distance = S_A[j] + A_B[j][k] + B_C[k];
+				if(distance<ans){
+					ans = distance;
 				}
 			}
 		}
-		for(int i=0;i<M;i++){
-			for(int j=0;j<N;j++){
-				for(int k=0;k<K;k++){
-					double temp = dist(start,Mp[i],Np[j],Kp[k]);
-					//cout<<temp<<endl;
-					if(temp<distance){
-						distance=temp;
-					}
+		for(int j=0;j<M;j++){
+			for(int k=0;k<N;k++){
+				double distance = S_B[j] + A_B[k][j] + A_C[k];
+				if(distance<ans){
+					ans = distance;
 				}
 			}
 		}
-		cout<<setprecision(7)<<distance<<endl;
+		cout<<setprecision(15)<<ans<<endl;
 	}
-
 	return 0;
 }
