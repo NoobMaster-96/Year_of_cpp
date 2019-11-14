@@ -1,35 +1,50 @@
 #include<bits/stdc++.h>
 #include<math.h>
 using namespace std;
-
-bool checkchef(string str){
-	bool flag=0;
-	int len = str.length();
-	int c=0,v=0;
-	for(int i=0;i<len;i++){
-		if(str[i]=='a'||str[i]=='e'||str[i]=='i'||str[i]=='o'||str[i]=='u')
-			v++;
-		else
-			c++;
-	}
-	if(v>=c)
+#define ll_i long long int
+bool checkchef(char ch){
+	if(ch=='a'||ch=='e'||ch=='i'||ch=='o'||ch=='u')
 		return 1;
-
-	return 0;
+	else
+		return 0;
 }
+
+bool divide(string str){
+	bool check=0;
+	for(ll_i i=0;i<str.size();i++){
+		if(!checkchef(str[i])&&(i<str.size()-2)){
+			if(checkchef(str[i+1])&&checkchef(str[i+2])){
+				check = 1;
+			}
+			else{
+				return 0;
+			}
+		}
+		if(!checkchef(str[i])&&(i==str.size()-2)){
+			if(checkchef(str[i+1])){
+				return 1;
+			}
+			else{
+				return 0;
+			}
+		}
+	}
+	return 1;
+}
+
 int main(){
-	int T;
+	ll_i T;
 	cin>>T;
-	for(int i=0;i<T;i++){
-		int L,N=0,M=0;
+	for(ll_i t=0;t<T;t++){
+		ll_i L,N=0,M=0;
 		cin>>L;
 		vector<string> Alice;
 		vector<string> Bob;
 		string str;
-		for(int j=0;j<L;j++){
+		for(ll_i j=0;j<L;j++){
 			cin>>str;
-			bool check = checkchef(str);
-			sort(str.begin(),str.end());
+			bool check = divide(str);
+			//sort(str.begin(),str.end());
 			if (check==1){
 				Alice.push_back(str);
 				N++;
@@ -39,35 +54,58 @@ int main(){
 				M++;
 			}
 		}
-		string Achar;
-		vector<double> Apresent(26,0);
-		vector<double> Afpresent(26,0);
-		string Bchar;
-		vector<double> Bpresent(26,0);
-		vector<double> Bfpresent(26,0);
-		for(int i=0;i<26;i++){
-			char c = 97+i;
-			Achar.push_back(c);
-			Bchar.push_back(c);
-		}
 
-		for(int j=0;j<N;j++){
-			int len = Alice[j].length();
-			char x = Alice[j][0];
-			double freq = 1;
-			Apresent[x-97] = 1;
-			for(int k=1;k<len;k++){
-
-			}
+		if(N==0){
+			cout<<0.0<<endl;
+			continue;
 		}
-		//cout<<Achar<<endl<<Bchar;
-		/*for(int j=0;j<N;j++){
-			cout<<Alice[j]<<endl;
+		if(M==0){
+			cout<<"Infinity"<<endl;
+			continue;
 		}
-		cout<<"#####"<<endl;
-		for(int j=0;j<M;j++){
-			cout<<Bob[j]<<endl;
-		}*/
-
+		ll_i tcnt[26];
+		ll_i cnt[26];
+		memset(tcnt,0,sizeof(tcnt));
+		memset(cnt,0,sizeof(cnt));
+		for(auto i:Bob){
+			set<char> str;
+            for (auto j : i){
+                tcnt[j - 'a']++;
+                str.insert(j);
+            }
+            for (auto j : str){
+                cnt[j - 'a']++;
+            }
+		}
+		double val = 0;
+        for (ll_i i = 0; i < 26; i++){
+            if (tcnt[i]){
+                val += (-log10(cnt[i])) + (double)M * (log10(tcnt[i]));
+            }
+        }
+        memset(tcnt,0,sizeof(tcnt));
+		memset(cnt,0,sizeof(cnt));
+		for(auto i:Alice){
+			set<char> str;
+            for (auto j : i){
+                tcnt[j - 'a']++;
+                str.insert(j);
+            }
+            for (auto j : str){
+                cnt[j - 'a']++;
+            }
+		}
+        for (ll_i i = 0; i < 26; i++){
+            if (tcnt[i]){
+                val += (log10(cnt[i])) - (double)N * (log10(tcnt[i]));
+            }
+        }
+        if (val > 7){
+            cout << "Infinity" << endl;
+        }
+        else{
+            cout << fixed;
+            cout << setprecision(10) << pow(10.00, val) << endl;
+        }
 	}
 }
