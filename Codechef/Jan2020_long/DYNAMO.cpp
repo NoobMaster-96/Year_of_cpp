@@ -4,24 +4,26 @@ using namespace std;
 int main(){
 	int t;
 	cin>>t;
-	while(t--){
+	while(t){
 		long long int n;
 		cin>>n;
-		unsigned long long int A,B,C,D,E,S=0;
+		long long int A,B,C,D,E,S;
+		long long int val = pow(10,n);
 		cin>>A;
-		S = 2*pow(10,n) + A;
-		cout<<S<<endl<<flush;
+		S = 2*val + A;
+		cout<<S<<endl;
 		cin>>B;
-		C = pow(10,n) - B;
-		cout<<C<<endl<<flush;
+		C = val - B;
+		cout<<C<<endl;
 		cin>>D;
-		E = pow(10,n) - D;
-		cout<<E<<endl<<flush;
+		E = val - D;
+		cout<<E<<endl;
 		int check;
 		cin>>check;
 		if(check == -1){
-			continue;
+			exit(0);
 		}
+		t--;
 	}
 	return 0;
 }

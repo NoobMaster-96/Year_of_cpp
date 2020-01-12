@@ -41,32 +41,29 @@ int main(){
 		}
 		minseq[i+1] = seqs;
 	}
-	/*for(int i=0; i<=n; i++){
+	for(int i=1; i<=n; i++){
 		cout<<maxseq[i]<<" "<<minseq[i]<<endl;
-	}*/
+	}
 	while(q--){
-		int l,r;
+		int l,r; 
 		cin>>l>>r;
-		int a,b;
-		if(maxseq[l-1] == maxseq[l]){
+		int a=0,b=0;
+		if(l+1 == r){
+			cout<<"NO"<<endl;
+			continue;
+		}
+		else{
 			a = maxseq[r] - maxseq[l];
-		}
-		else{
-			a = maxseq[r] - maxseq[l] + 1;
-		}
-		if(minseq[l-1] == minseq[l]){
 			b = minseq[r] - minseq[l];
-		}
-		else{
-			b = minseq[r] - minseq[l] + 1;
+			if(maxseq[l] == maxseq[l+1] && seq[l] < seq[l+1]){
+				a++;
+			}
+			if(minseq[l] == minseq[l+1] && seq[l] > seq[l+1]){
+				b++;
+			}
 		}
 		if(a==b){
-			if(a == 0){
-				cout<<"NO"<<endl;
-			}
-			else{
-				cout<<"YES"<<endl;
-			}
+			cout<<"YES"<<endl;
 		}
 		else{
 			cout<<"NO"<<endl;
