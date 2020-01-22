@@ -41,9 +41,9 @@ int main(){
 		}
 		minseq[i+1] = seqs;
 	}
-	for(int i=1; i<=n; i++){
+	/*for(int i=1; i<=n; i++){
 		cout<<maxseq[i]<<" "<<minseq[i]<<endl;
-	}
+	}*/
 	while(q--){
 		int l,r; 
 		cin>>l>>r;
