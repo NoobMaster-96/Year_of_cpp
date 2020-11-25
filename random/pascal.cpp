@@ -1,36 +1,62 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-int binomialCoeff(int n, int k){ 
-    int res = 1; 
-    if(k > n - k){
-    	k = n - k; 
+class Emp{
+public:
+    int ID;
+    string name;
+};
+
+class Node{
+public:
+    Emp data;
+    Node* next;
+};
+
+class LinkedList{
+    Node* root;
+    Node* tail;
+public:
+    LinkedList(){
+        root = NULL;
+        tail = NULL;
     }
-    for(int i = 0; i < k; ++i){ 
-        res *= (n - i); 
-        res /= (i + 1); 
-    } 
-      
-    return res; 
-} 
-  
 
-void printPascal(int n){
-    for (int line = 0; line < n; line++){
- 		for(int i=n-1-line;i>=0;i--){
- 			cout<<" ";
- 		}
-        for (int i = 0; i <= line; i++){
-        	cout<<binomialCoeff(line,i)<<" ";
+    void addnode(Emp x){
+
+        Node* newnode = new Node;
+        newnode->data = x;
+        newnode->next = NULL;
+        if(root==NULL){
+            root = newnode;
+            tail = root;
+        }
+        else{
+            tail->next = newnode;
+            tail = tail->next;
         } 
-        cout<<endl;
-    } 
-} 
+    }
 
-int main() 
-{ 
-    int n;
-    cin>>n; 
-    printPascal(n); 
-    return 0; 
+    void display(){
+        Node* temp = root;
+        while(temp!=NULL){
+            cout<<temp->data.name<<" ";
+            temp = temp->next;
+        }
+    }
+    
+};
+
+int main(){
+    LinkedList l;
+    for(int i=0;i<3;i+=1){
+        int id;
+        string name;
+        cin>>id>>name;
+        Emp e;
+        e.ID = id;
+        e.name = name;
+        l.addnode(e);
+    }
+    l.display();
 } 
