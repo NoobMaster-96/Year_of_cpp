@@ -39,7 +39,7 @@ long long FinalValues(long long A, long long B, long long C){
 			an.insert(x+y);
 		}
 	}
-	ans = ceil((C/(double)l))*(long long)an.size();
+	ans = (C/l)*(long long)an.size();
 	return ans;
 }
 
