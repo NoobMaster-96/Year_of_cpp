@@ -13,11 +13,10 @@ long long min_cost(int N, string S){
 			odd_freq+=1;
 		}
 	}
-	cout<<odd_freq<<endl;
 	if((N&1 && odd_freq!=1)||(!(N&1) && odd_freq>0)){
 		return -1;
 	}
-	return 0;
+	
 }
 
 int main(){
